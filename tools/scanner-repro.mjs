@@ -3,37 +3,42 @@
 // resolution, read dsh.client, check the platform, locate the "./client"
 // export, and confirm the artifact exists and looks like a loader bundle.
 // Also compares the artifact against a known-good official bundle shape.
-// Usage: node tools/scanner-repro.mjs <packageRoot>
+// Usage: node tools/scanner-repro.mjs [packageRoot]
+//   DSH_PROFILE_DIR, DSH_INSTALL and DSH_PACKAGE_DIR override the detection.
 import fs from 'node:fs'
 import path from 'node:path'
 import { createRequire } from 'node:module'
-import { fileURLToPath, pathToFileURL } from 'node:url'
+import { pathToFileURL } from 'node:url'
+import { installModulesDir, packageRoot, profileDir } from './paths.mjs'
 
-const root = process.argv[2]
-const profileDir = 'C:\\Users\\zavtr\\.dsh\\profiles\\web'
-const baseUrl = pathToFileURL(profileDir + path.sep).href
+const root = process.argv[2] ?? packageRoot()
+const profile = profileDir()
+const baseUrl = pathToFileURL(profile + path.sep).href
+const packageName = JSON.parse(fs.readFileSync(path.join(root, 'package.json'), 'utf8')).name
 
 const problems = []
 const note = (message) => { problems.push(message); console.log(`  FAIL  ${message}`) }
 const ok = (message) => console.log(`  ok    ${message}`)
 
+console.log(`package root:   ${root}`)
+console.log(`profile dir:    ${profile}`)
 console.log(`profile baseUrl: ${baseUrl}`)
 
 // 1) locatePkgJson: the loader would import the row by name from the tree base URL.
 const require = createRequire(baseUrl)
 let pkgPath
 try {
-  pkgPath = require.resolve('dsh-locale-ru/package.json')
-  ok(`row resolves: dsh-locale-ru -> ${pkgPath}`)
+  pkgPath = require.resolve(`${packageName}/package.json`)
+  ok(`row resolves: ${packageName} -> ${pkgPath}`)
 } catch (error) {
-  note(`cannot resolve dsh-locale-ru from the tree base URL: ${String(error)}`)
+  note(`cannot resolve ${packageName} from the tree base URL: ${String(error)}`)
 }
 if (!pkgPath) process.exit(1)
 
 // 2) nearestPackage: the manifest declaring the name owns the module.
 const pkg = JSON.parse(fs.readFileSync(pkgPath, 'utf8'))
 console.log(`  package name: ${pkg.name}`)
-if (pkg.name !== 'dsh-locale-ru') note(`manifest name ${pkg.name} does not match the row`)
+if (pkg.name !== packageName) note(`manifest name ${pkg.name} does not match the row`)
 
 // 3) parseDshClient + platform gate.
 const client = pkg.dsh?.client
@@ -49,11 +54,11 @@ else {
   if (!Array.isArray(client.inject) || !client.inject.includes('@deepseek-ai/dsh-client-locale')) {
     note('dsh.client.inject does not declare @deepseek-ai/dsh-client-locale')
   } else ok('declares the locale dependency informationally')
+  const install = installModulesDir()
   for (const name of client.inject ?? []) {
     const pkgName = name.startsWith('@') ? name.split('/').slice(0, 2).join('/') : name.split('/')[0]
-    if (!fs.existsSync(path.join('C:\\Users\\zavtr\\AppData\\Local\\npm-cache\\_npx\\1e7f6d9597241db0\\node_modules', pkgName))) {
-      note(`declared dependency ${pkgName} is not present in the installation`)
-    }
+    if (install === undefined) console.log(`  info  cannot locate the installation; skipped presence check for ${pkgName}`)
+    else if (!fs.existsSync(path.join(install, pkgName))) note(`declared dependency ${pkgName} is not present in the installation`)
   }
 }
 
@@ -72,7 +77,7 @@ else {
     // itself with the package id, then a factory.
     if (!/window\.__ModuleLoader__\.load\(\{/.test(source)) note('bundle does not use the module-loader format')
     else ok('bundle uses the window.__ModuleLoader__.load format')
-    if (!source.includes(`id: "dsh-locale-ru"`)) note('bundle id does not match the package name')
+    if (!source.includes(`id: "${packageName}"`)) note('bundle id does not match the package name')
     else ok('bundle id matches the package name')
     const registrations = (source.match(/ctx\.locale\.register\(/g) ?? []).length
     const languages = (source.match(/addLanguage\(/g) ?? []).length
@@ -83,8 +88,15 @@ else {
 }
 
 // 5) Shape comparison with a shipped official client bundle.
-const official = 'C:\\Users\\zavtr\\AppData\\Local\\npm-cache\\_npx\\1e7f6d9597241db0\\node_modules\\@deepseek-ai\\dsh-client-ui-plan\\lib\\client.js'
-if (fs.existsSync(official)) {
+const install = installModulesDir()
+const official = install === undefined
+  ? undefined
+  : path.join(install, '@deepseek-ai', 'dsh-client-ui-plan', 'lib', 'client.js')
+if (official === undefined) {
+  console.log('  info  installation not located; skipped the official-format comparison')
+} else if (!fs.existsSync(official)) {
+  console.log(`  info  reference bundle not found at ${official}; skipped the comparison`)
+} else {
   const reference = fs.readFileSync(official, 'utf8')
   const refHead = reference.slice(0, reference.indexOf('factory:'))
   const ours = fs.readFileSync(path.join(root, 'lib', 'client.js'), 'utf8')

@@ -1,14 +1,18 @@
 // Boot a throwaway dsh web instance on a spare port and verify, over real HTTP,
-// that the dsh-locale-ru client bundle is part of the served boot graph.
-// Usage: node verify-live.mjs <port> [logPath]
+// that the package's client bundle is part of the served boot graph.
+// Usage: node verify-live.mjs [port] [logPath]
+//   the dsh installation is located automatically; DSH_INSTALL overrides it.
 import { spawn, execFileSync } from 'node:child_process'
-import { writeFileSync, mkdtempSync } from 'node:fs'
+import { writeFileSync, mkdtempSync, readFileSync } from 'node:fs'
 import { tmpdir } from 'node:os'
 import { join } from 'node:path'
+import { dshBin, packageRoot } from './paths.mjs'
 
+const root = packageRoot()
+const packageName = JSON.parse(readFileSync(join(root, 'package.json'), 'utf8')).name
 const port = process.argv[2] ?? '3099'
 const logPath = process.argv[3] ?? join(tmpdir(), `dsh-verify-${port}.log`)
-const bin = 'C:/Users/zavtr/AppData/Local/npm-cache/_npx/1e7f6d9597241db0/node_modules/@deepseek-ai/dsh/lib/bin.js'
+const bin = dshBin()
 const tempRoot = mkdtempSync(join(tmpdir(), 'dsh-verify-'))
 
 let output = ''
@@ -75,18 +79,18 @@ try {
   const index = await get('/')
   result.index = index.status
   console.log(`GET / -> ${index.status}, ${index.body.length} bytes, cookie=${cookie ? 'yes' : 'no'}`)
-  const mentions = index.body.match(/[^"'\\]*dsh-locale-ru[^"'\\]*/g) ?? []
+  const mentions = index.body.match(new RegExp(`[^"'\\\\]*${packageName}[^"'\\\\]*`, 'g')) ?? []
   result.bootMentions = [...new Set(mentions)].slice(0, 5)
-  console.log(`boot manifest mentions dsh-locale-ru: ${mentions.length}`)
+  console.log(`boot manifest mentions ${packageName}: ${mentions.length}`)
   for (const m of result.bootMentions) console.log(`   ${m.slice(0, 160)}`)
-  const combo = index.body.match(/\/plugins\/[^"]*dsh-locale-ru[^"]*/)
+  const combo = index.body.match(new RegExp(`/plugins/[^"]*${packageName}[^"]*`))
   if (combo) console.log(`   combo url: ${combo[0].slice(0, 200)}`)
 
-  const bundle = await get('/plugins/dsh-locale-ru/client.js')
+  const bundle = await get(`/plugins/${packageName}/client.js`)
   result.bundle = bundle.status
-  console.log(`GET /plugins/dsh-locale-ru/client.js -> ${bundle.status}, ${bundle.body.length} bytes`)
+  console.log(`GET /plugins/${packageName}/client.js -> ${bundle.status}, ${bundle.body.length} bytes`)
   if (bundle.status === 200) {
-    const ok = bundle.body.includes("addLanguage") && bundle.body.includes('"ru"') && bundle.body.includes('dsh-locale-ru')
+    const ok = bundle.body.includes('addLanguage') && bundle.body.includes('"ru"') && bundle.body.includes(packageName)
     console.log(`   bundle content registers ru: ${ok}`)
     console.log(`   dictionaries in bundle: ${(bundle.body.match(/ctx\.locale\.register\(/g) ?? []).length}`)
   }

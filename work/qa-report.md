@@ -1,7 +1,7 @@
 # QA-отчёт по русскому переводу DSH Web UI
 
-Дата: ревизия файлов `C:\Users\zavtr\.dsh\locale-ru\dict\ru\*.json` (43 namespace, 1292 ключа)
-против эталона `C:\Users\zavtr\.dsh\locale-ru\work\en\*.json` и `GLOSSARY.md`.
+Дата: ревизия файлов `dict/ru/*.json` (43 namespace, 1292 ключа)
+против эталона `work/en/*.json` и `GLOSSARY.md`.
 
 ## Сводка автопроверок (машинные)
 

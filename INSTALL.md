@@ -6,22 +6,22 @@
 **Settings → General → Language** появился третий язык — **Русский**.
 
 ```
-C:\Users\zavtr\.dsh\profiles\web\package.json
-  dependencies:  "dsh-locale-ru": "file:C:/Users/zavtr/.dsh/locale-ru"
+%USERPROFILE%\.dsh\profiles\web\package.json
+  dependencies:  "dsh-locale-ru": "file:<путь к этому репозиторию>"
   dsh.profile.bundles: [ @deepseek-ai/dsh-base, @deepseek-ai/dsh-web-app,
                          @tt-a1i/archify-dsh, dsh-locale-ru ]
 ```
 
-Штатная команда, которой это сделано (повторять не нужно):
+Штатная команда, которой это делается (`<путь>` — каталог, куда склонирован
+репозиторий):
 
-```
-node "C:\Users\zavtr\AppData\Local\npm-cache\_npx\1e7f6d9597241db0\node_modules\@deepseek-ai\dsh\lib\bin.js" ^
-  plugin --profile web add "file:C:\Users\zavtr\.dsh\locale-ru"
+```powershell
+dsh plugin --profile web add "file:<путь>"
 ```
 
 `dsh plugin` — обёртка над pnpm в каталоге профиля: `pnpm add` плюс запись строки
 в `dsh.profile.bundles`. Состав дерева проверяется командой
-`... bin.js --profile web --dump-config` — в выводе должен быть блок
+`dsh --profile web --dump-config` — в выводе должен быть блок
 `# == dsh-locale-ru` со строкой `- id: locale-ru`.
 
 ## Правка переводов
@@ -31,9 +31,14 @@ node "C:\Users\zavtr\AppData\Local\npm-cache\_npx\1e7f6d9597241db0\node_modules\
 3. `node scripts/check.mjs` — сверка с английским корпусом (`work/en/`):
    покрытие, пропущенные ключи, плейсхолдеры. `--strict` — режим ворот для CI.
 4. `node tools/smoke.mjs .` — прогон бандла через мок-загрузчик и мок `ctx.locale`.
-5. `node tools/scanner-repro.mjs .` — проверка, что строка профиля резолвится
+5. `node tools/scanner-repro.mjs` — проверка, что строка профиля резолвится
    ровно так, как её видит сканер клиентских плагинов.
-6. Перезапустить GUI (ниже), иначе сервер продолжит отдавать старый бандл.
+6. Обновить страницу в браузере: клиентский HMR сам переимпортирует
+   изменившийся бандл. Перезапуск сервера нужен только при смене состава плагинов.
+
+Инструменты `tools/scanner-repro.mjs` и `tools/verify-live.mjs` сами находят
+установку dsh и каталог профиля; переопределить можно переменными окружения
+`DSH_INSTALL`, `DSH_PROFILE_DIR`, `DSH_HOME`, `DSH_PACKAGE_DIR`.
 
 ## Перезапуск GUI
 
@@ -48,19 +53,21 @@ Get-CimInstance Win32_Process -Filter "Name='node.exe'" |
 taskkill /PID <pid-сервера> /T /F
 taskkill /PID <pid-обёртки> /T /F
 
-# 3. поднять заново (из одного окна)
-C:\Users\zavtr\.dsh\launch-web.cmd
+# 3. поднять заново
+& "$env:USERPROFILE\.dsh\launch-web.cmd"
 ```
 
-`launch-web.cmd` выставляет `TEMP=C:\Temp` — без этого падает sandbox DSH.
+Лаунчер harness выставляет `TEMP` вне домашнего каталога — без этого падает
+sandbox DSH (ошибка `Windows ACL temp root must be outside the workspace`).
+Альтернатива — `bin\run-web.cmd` из этого репозитория: он делает то же самое
+и дополнительно отказывается стартовать на занятом порту.
 
 ### Через задачу планировщика
 
-Задача `dsh-web-3080` поднимает GUI независимо от сессии агента. Лаунчер сам
-отказывается стартовать на занятом порту (иначе два `dsh web` конкурируют за
-порт и проигравший остаётся жив без листенера — именно так один раз и вышло).
+Задача поднимает GUI независимо от сессии агента:
 
 ```powershell
+schtasks /create /tn dsh-web-3080 /tr "`"$env:USERPROFILE\.dsh\locale-ru\bin\run-web.cmd`" 3080" /sc once /st 23:59 /f
 taskkill /PID <pid-сервера> /T /F
 taskkill /PID <pid-обёртки> /T /F
 schtasks /run /tn dsh-web-3080
@@ -74,18 +81,17 @@ schtasks /run /tn dsh-web-3080
 - В браузере: **Settings → General → Language → Русский**; интерфейс
   переключается сразу, `<html lang>` становится `ru`. Выбор сохраняется в
   `~\.dsh\settings.yaml` (секция `locale`) и переживает перезапуск.
-- Проверить, что URL вообще отдаёт GUI: обычный `Invoke-WebRequest` к 3080
-  получает **401** — индекс отдаётся только по URL со стартовым токеном,
-  который печатает сам `dsh web` («reopen the URL printed by dsh web»).
-  Это не ошибка пакета.
+- Индекс GUI отдаётся только по URL со стартовым токеном, который печатает сам
+  `dsh web` («reopen the URL printed by dsh web»), поэтому обычный
+  `Invoke-WebRequest` к порту получает **401**. Это не ошибка пакета.
 
 ## Откат
 
-```
-node "...\@deepseek-ai\dsh\lib\bin.js" plugin --profile web remove dsh-locale-ru
+```powershell
+dsh plugin --profile web remove dsh-locale-ru
 ```
 
 или вручную: убрать `dsh-locale-ru` из `dependencies` и из `dsh.profile.bundles`
-в `C:\Users\zavtr\.dsh\profiles\web\package.json`, перезапустить GUI. Строку
+в `%USERPROFILE%\.dsh\profiles\web\package.json`, перезапустить GUI. Строку
 `locale.preference: ru` в `settings.yaml` можно удалить, чтобы вернуться к языку
 браузера.

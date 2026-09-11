@@ -18,8 +18,10 @@
 
 ## Установка
 
+Из корня этого репозитория (путь к пакету — тот каталог, в котором вы его разместили):
+
 ```powershell
-dsh plugin --profile web add "file:C:\Users\zavtr\.dsh\locale-ru"
+dsh plugin --profile web add "file:$PWD"
 ```
 
 Затем перезапустить GUI. Подробности, процедура перезапуска и откат —
@@ -51,9 +53,13 @@ node scripts/build.mjs            # dict/ru/*.json -> lib/client.js
 node scripts/check.mjs            # сверка с work/en: покрытие, ключи, плейсхолдеры
 node scripts/check.mjs --strict   # то же, но с ненулевым кодом на проблемах
 node tools/smoke.mjs .            # прогон бандла через мок-загрузчик и мок ctx.locale
-node tools/scanner-repro.mjs .    # строка профиля глазами сканера клиентских плагинов
+node tools/scanner-repro.mjs      # строка профиля глазами сканера клиентских плагинов
 node tools/terms.mjs dict/ru      # аудит терминологии по GLOSSARY.md
 ```
+
+`scanner-repro` и `verify-live` сами находят установку dsh и каталог профиля;
+переопределяются переменными `DSH_INSTALL`, `DSH_PROFILE_DIR`, `DSH_HOME`,
+`DSH_PACKAGE_DIR`.
 
 Обновление корпуса, когда DSH добавит строки:
 
