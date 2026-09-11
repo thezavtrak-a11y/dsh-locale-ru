@@ -1,0 +1,5 @@
+# Normalize line endings: the JS/JSON sources are authored with LF.
+* text=auto eol=lf
+*.cmd text eol=crlf
+*.png binary
+*.woff2 binary

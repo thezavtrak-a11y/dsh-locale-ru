@@ -1,0 +1,14 @@
+{
+  "close": "Close",
+  "connection.connected": "Connected",
+  "connection.connecting": "Reconnecting",
+  "connection.error": "Disconnected",
+  "connection.reconnect": "Disconnected, reconnect now",
+  "connection.restart": "Reconnecting automatically, reconnect now",
+  "connection.retry": "Reconnect now",
+  "general.nav": "General",
+  "openDocument": "Open configuration file",
+  "openDocument.error": "Could not open configuration file",
+  "title": "Settings",
+  "trigger": "Settings"
+}

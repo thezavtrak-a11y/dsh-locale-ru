@@ -1,0 +1,16 @@
+{
+  "description.compact": "Compact older conversation history",
+  "description.export": "Download this Session log as a ZIP archive",
+  "description.feedback": "record feedback about this session",
+  "description.goal": "set or view the goal for a long-running task",
+  "description.permission": "Switch the permission preset (sandbox mode + approval policy)",
+  "description.plan": "Enter or leave plan mode",
+  "listbox.aria": "/{command} matches",
+  "notice.attachmentsUnsupported": "/{command} does not accept attachments; remove them first",
+  "overlay.aria": "/{command} options",
+  "search.aria": "Filter options",
+  "search.placeholder": "Search…",
+  "status.applying": "Applying…",
+  "status.empty": "No options",
+  "status.loading": "Loading options…"
+}

@@ -1,0 +1,16 @@
+# Dependencies
+node_modules/
+.pnpm-store/
+
+# Local scratch: harness temp roots, verification logs
+*.log
+.tmp/
+tmp/
+C:/Temp/
+
+# Editor / OS noise
+.DS_Store
+Thumbs.db
+*.swp
+.idea/
+.vscode/

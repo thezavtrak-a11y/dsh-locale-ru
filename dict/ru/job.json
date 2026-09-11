@@ -1,0 +1,17 @@
+{
+  "count.idle.one": "{count} фоновая задача",
+  "count.idle.other": "{count} фоновых задач",
+  "count.live.one": "{count} фоновая задача выполняется",
+  "count.live.other": "{count} фоновых задач выполняется",
+  "duration.hours": "{hours} ч {minutes} мин",
+  "duration.minutes": "{minutes} мин {seconds} с",
+  "duration.seconds": "{seconds} с",
+  "duration.title.done": "Заняло {duration}",
+  "duration.title.live": "Выполняется {duration}",
+  "list.aria": "Фоновые задачи",
+  "status.completed": "завершено",
+  "status.failed": "не удалось",
+  "status.killed": "отменено",
+  "status.running": "выполняется",
+  "status.stopping": "останавливается"
+}

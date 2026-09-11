@@ -1,0 +1,11 @@
+{
+  "dialog.close": "Закрыть",
+  "dialog.commandFailed": "Не удалось запустить экспорт сессии.",
+  "dialog.errorTitle": "Не удалось экспортировать сессию",
+  "dialog.preparingDescription": "Подготовка ZIP-архива с этой сессией, её дочерними сессиями и вложениями.",
+  "dialog.preparingTitle": "Экспорт сессии",
+  "dialog.successDescription": "Браузер скачивает ZIP-архив сессии.",
+  "dialog.successTitle": "Скачивание сессии начато",
+  "header.more": "Ещё действия",
+  "menu.download": "Скачать журнал сессии"
+}

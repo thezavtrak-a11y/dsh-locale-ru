@@ -1,0 +1,17 @@
+{
+  "count.idle.one": "{count} background job",
+  "count.idle.other": "{count} background jobs",
+  "count.live.one": "{count} background job running",
+  "count.live.other": "{count} background jobs running",
+  "duration.hours": "{hours}h {minutes}m",
+  "duration.minutes": "{minutes}m {seconds}s",
+  "duration.seconds": "{seconds}s",
+  "duration.title.done": "Took {duration}",
+  "duration.title.live": "Running for {duration}",
+  "list.aria": "Background jobs",
+  "status.completed": "completed",
+  "status.failed": "failed",
+  "status.killed": "cancelled",
+  "status.running": "running",
+  "status.stopping": "stopping"
+}

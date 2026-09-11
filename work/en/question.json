@@ -1,0 +1,17 @@
+{
+  "action.next": "Next",
+  "action.skip": "Skip this question",
+  "custom.placeholder": "Type your answer",
+  "error.incomplete": "Please complete this question first.",
+  "error.unanswered": "Please select an option or enter a custom answer.",
+  "nav.cancel": "Dismiss all questions",
+  "nav.maximize": "Expand the question card",
+  "nav.minimize": "Collapse the question card",
+  "nav.next": "Next question",
+  "nav.prev": "Previous question",
+  "option.recommended": "Recommended",
+  "plan.approve": "Approve",
+  "plan.decline": "Refuse",
+  "plan.discuss": "Chat about it",
+  "plan.header": "Plan review"
+}

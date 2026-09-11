@@ -1,0 +1,9 @@
+{
+  "menu.userOnly": "user-only",
+  "row.failed": "Skill load failed",
+  "row.inspect": "Inspect",
+  "row.instructions": "Instructions",
+  "row.running": "Loading skill",
+  "row.stopped": "Skill load stopped",
+  "row.title": "Skill"
+}

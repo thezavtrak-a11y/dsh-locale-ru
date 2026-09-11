@@ -1,0 +1,20 @@
+{
+  "frequency.every": "Every {value} {unit}",
+  "frequency.once": "Once",
+  "list.aria": "Active reminders",
+  "relative.future": "in {value} {unit}",
+  "relative.now": "Due now",
+  "relative.overdue": "{value} {unit} overdue",
+  "status.overdue": "Overdue",
+  "status.scheduled": "Scheduled",
+  "trigger.one": "{count} reminder",
+  "trigger.other": "{count} reminders",
+  "unit.day.one": "day",
+  "unit.day.other": "days",
+  "unit.hour.one": "hour",
+  "unit.hour.other": "hours",
+  "unit.minute.one": "minute",
+  "unit.minute.other": "minutes",
+  "unit.second.one": "second",
+  "unit.second.other": "seconds"
+}
