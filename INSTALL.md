@@ -1,5 +1,23 @@
 # dsh-locale-ru — установка и обслуживание
 
+## 0.2.0: где теперь живёт выбор языка (правка 2026-10-03)
+
+Файла `~/.dsh/settings.yaml` в 0.2.0 больше нет: его секции стали строками-настройками
+профильного патча, а namespace локали — `locale`. Чтобы язык не зависел от языка
+браузера, в `~/.dsh/profiles/<профиль>/cordis.patch.yml` нужна строка:
+
+```yaml
+- id: locale
+  name: "@deepseek-ai/dsh-client-locale"
+  config:
+    preference: ru
+```
+
+Профиль `desktop` (окно Electron) собирается только приложением; CLI его не бутит
+(`error: profile "desktop" is managed exclusively by the Electron application`), поэтому
+состав проверяется копией профиля или самим приложением. В 0.2.0 пакет подключён и к
+`web`, и к `desktop`.
+
 ## Состояние
 
 Пакет собран, подключён к профилю `web` и подтверждён в живом GUI: в
@@ -73,14 +91,17 @@ taskkill /PID <pid-обёртки> /T /F
 schtasks /run /tn dsh-web-3080
 ```
 
-Лог: `C:\Temp\dsh-web-3080.log` (код 3 = «порт занят, не стартовал»).
+Лог: `%DSH_TEMP%\dsh-web-3080.log` (по умолчанию `C:\Temp`, переопределяется
+переменной `DSH_TEMP`; код 3 = «порт занят, не стартовал»).
 Убрать задачу: `schtasks /delete /tn dsh-web-3080 /f`.
 
 ## Проверка
 
 - В браузере: **Settings → General → Language → Русский**; интерфейс
-  переключается сразу, `<html lang>` становится `ru`. Выбор сохраняется в
-  `~\.dsh\settings.yaml` (секция `locale`) и переживает перезапуск.
+  переключается сразу, `<html lang>` становится `ru`. Выбор хранится строкой
+  `- id: locale` с `config.preference: ru` в патче профиля
+  (`~\.dsh\profiles\<профиль>\cordis.patch.yml`) и переживает перезапуск.
+  В версии 0.1.5 он лежал в `~\.dsh\settings.yaml` — этого файла в 0.2.0 нет.
 - Индекс GUI отдаётся только по URL со стартовым токеном, который печатает сам
   `dsh web` («reopen the URL printed by dsh web»), поэтому обычный
   `Invoke-WebRequest` к порту получает **401**. Это не ошибка пакета.

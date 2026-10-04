@@ -21,10 +21,13 @@ setlocal
 set "PORT=%~1"
 if "%PORT%"=="" set "PORT=3080"
 
-set "TEMP=C:\Temp"
-set "TMP=C:\Temp"
+rem Scratch root: overridable, defaults to C:\Temp. It must be outside the user
+rem profile (the session workspace) for the reasons in the header comment.
+if "%DSH_TEMP%"=="" set "DSH_TEMP=C:\Temp"
+set "TEMP=%DSH_TEMP%"
+set "TMP=%DSH_TEMP%"
 if not exist "%TEMP%" mkdir "%TEMP%" >nul 2>&1
-set "LOG=C:\Temp\dsh-web-%PORT%.log"
+set "LOG=%TEMP%\dsh-web-%PORT%.log"
 echo [dsh-ru] %DATE% %TIME% launcher start >> "%LOG%"
 
 rem Refuse to start when the port is already served: two dsh web processes race
