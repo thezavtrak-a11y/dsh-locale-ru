@@ -84,7 +84,9 @@ for (const [ns, dict] of byNs) {
   }
 }
 
-// The ru dictionaries must cover the English source exactly.
+// The ru dictionaries must cover the English source exactly. A key whose English
+// value is empty on purpose (an empty separator or prefix) is deliberately absent:
+// the build refuses empty strings, and the ru -> en fallback chain answers it.
 const enDir = path.join(root, 'work', 'en')
 let mismatch = 0
 for (const file of fs.readdirSync(enDir).filter((f) => f.endsWith('.json'))) {
@@ -92,7 +94,10 @@ for (const file of fs.readdirSync(enDir).filter((f) => f.endsWith('.json'))) {
   const en = JSON.parse(fs.readFileSync(path.join(enDir, file), 'utf8'))
   const ru = byNs.get(ns)
   if (!ru) { console.log(`MISSING namespace ${ns}`); mismatch++; continue }
-  for (const key of Object.keys(en)) if (!(key in ru)) { console.log(`MISSING ${ns}/${key}`); mismatch++ }
+  for (const [key, value] of Object.entries(en)) {
+    if (value === '') continue
+    if (!(key in ru)) { console.log(`MISSING ${ns}/${key}`); mismatch++ }
+  }
 }
 
 console.log(mismatch === 0 ? 'smoke: OK' : `smoke: ${mismatch} mismatches`)

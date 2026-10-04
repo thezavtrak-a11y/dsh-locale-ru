@@ -57,6 +57,16 @@ for (const ns of enNamespaces) {
   const ru = JSON.parse(readFileSync(ruPath, 'utf8'))
   stats.ru += Object.keys(ru).length
   for (const [key, source] of Object.entries(en)) {
+    /* An intentionally empty upstream value (an empty separator or prefix) must not
+     * be stored: the bundle build refuses empty strings, and the ru -> en fallback
+     * chain already answers it. Only a non-empty translation is a finding. */
+    if (source.length === 0) {
+      const stored = ru[key]
+      if (stored !== undefined && (typeof stored !== 'string' || stored.length !== 0)) {
+        add('EMPTY', ns, key, 'upstream value is empty, translation is not')
+      }
+      continue
+    }
     if (!(key in ru)) { add('MISSING_KEY', ns, key); continue }
     const value = ru[key]
     if (typeof value !== 'string' || value.length === 0) { add('EMPTY', ns, key); continue }

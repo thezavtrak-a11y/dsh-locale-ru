@@ -7,5 +7,6 @@
   "dialog.successDescription": "The browser is downloading the Session ZIP.",
   "dialog.successTitle": "Session download started",
   "header.more": "More actions",
-  "menu.download": "Download session log"
+  "menu.download": "Download session log",
+  "menu.feedback": "Feedback"
 }

@@ -3,6 +3,7 @@
   "crumb.root": "Рабочая папка",
   "section.files": "Файлы и папки",
   "section.sessions": "Сессии",
+  "section.subagents": "Субагенты",
   "time.days": "{n} дн",
   "time.hours": "{n} ч",
   "time.minutes": "{n} мин",

@@ -3,6 +3,9 @@
   "brand.localBuild": "DSH Local Build",
   "cancel": "Cancel",
   "close": "Close",
+  "codeBlock.title": "Code block",
+  "codeBlock.unwrap": "Do not wrap lines",
+  "codeBlock.wrap": "Wrap lines",
   "collapse": "Collapse",
   "copied": "Copied",
   "copy": "Copy",
@@ -16,8 +19,6 @@
   "delete": "Delete",
   "edit": "Edit",
   "expand": "Expand",
-  "json.collapseNode": "Collapse JSON node",
-  "json.expandNode": "Expand JSON node",
   "json.label": "JSON",
   "load.failed": "Failed to load",
   "loading": "Loading…",
@@ -37,5 +38,6 @@
   "submit": "Submit",
   "submitting": "Submitting…",
   "truncated": "Truncated",
-  "unknown": "Unknown"
+  "unknown": "Unknown",
+  "workspace.defaultName": "Default workspace"
 }

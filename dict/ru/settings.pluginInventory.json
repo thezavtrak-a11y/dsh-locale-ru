@@ -1,5 +1,8 @@
 {
   "active": "Работает",
+  "clientSyncFailed": "Часть плагинов не синхронизировалась на этой странице. Состояние на хосте не изменилось.",
+  "clientSyncRetry": "Повторить на этой странице",
+  "clientSyncing": "Синхронизация плагинов на этой странице…",
   "condition": "Условие отключения",
   "conditionalTag": "По условию",
   "configuration": "Настройка",
@@ -19,6 +22,7 @@
   "loading": "Чтение плагинов…",
   "loadingPhase": "Загрузка",
   "matchesInOtherPresets": "Совпадений в других профилях: {count} — ",
+  "metadataError": "Ошибка метаданных пакета: {error}",
   "moduleLabel": "Модуль",
   "pending": "Ожидание зависимостей",
   "presetEnabledTag": "Включён через профили",

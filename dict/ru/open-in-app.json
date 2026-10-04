@@ -33,9 +33,15 @@
   "app.windsurf": "Windsurf",
   "app.xcode": "Xcode",
   "app.zed": "Zed",
-  "menu.aria": "Открыть в",
-  "menu.toggle": "Выбрать приложение для открытия",
-  "open.error": "Не удалось открыть",
   "open.title": "Открыть рабочую папку в {app}",
-  "open.tooltip": "Открыть локально"
+  "open.tooltip": "Открыть локально",
+  "path.appDefault": "{app} (по умолчанию)",
+  "path.appsError": "Не удалось загрузить приложения",
+  "path.more": "Другие способы открыть",
+  "path.open": "Открыть",
+  "path.openError": "Не удалось открыть. Повторите.",
+  "path.reveal": "Показать расположение файла",
+  "path.revealError": "Не удалось показать расположение файла. Повторите.",
+  "shortcut.busy": "Открытие рабочей папки",
+  "shortcut.unavailable": "Текущая рабочая папка или локальное приложение недоступны"
 }

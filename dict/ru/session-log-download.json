@@ -7,5 +7,6 @@
   "dialog.successDescription": "Браузер скачивает ZIP-архив сессии.",
   "dialog.successTitle": "Скачивание сессии начато",
   "header.more": "Ещё действия",
-  "menu.download": "Скачать журнал сессии"
+  "menu.download": "Скачать журнал сессии",
+  "menu.feedback": "Отзыв"
 }

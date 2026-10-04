@@ -3,6 +3,9 @@
   "brand.localBuild": "DSH, локальная сборка",
   "cancel": "Отмена",
   "close": "Закрыть",
+  "codeBlock.title": "Блок кода",
+  "codeBlock.unwrap": "Не переносить строки",
+  "codeBlock.wrap": "Переносить строки",
   "collapse": "Свернуть",
   "copied": "Скопировано",
   "copy": "Копировать",
@@ -16,8 +19,6 @@
   "delete": "Удалить",
   "edit": "Изменить",
   "expand": "Развернуть",
-  "json.collapseNode": "Свернуть узел JSON",
-  "json.expandNode": "Развернуть узел JSON",
   "json.label": "JSON",
   "load.failed": "Не удалось загрузить",
   "loading": "Загрузка…",
@@ -37,5 +38,6 @@
   "submit": "Отправить",
   "submitting": "Отправка…",
   "truncated": "Обрезано",
-  "unknown": "Неизвестно"
+  "unknown": "Неизвестно",
+  "workspace.defaultName": "Рабочая папка по умолчанию"
 }
